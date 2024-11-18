@@ -1,0 +1,239 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: mona
+      changes:
+        - insert:
+            tableName: form
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Application Form"
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-18 10:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-18 10:00:00"
+
+        - insert:
+            tableName: form
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Survey Form"
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-18 11:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-18 11:00:00"
+
+  - changeSet:
+      id: 8
+      author: mona
+      changes:
+        - insert:
+            tableName: filled_form
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: form_id
+                  value: 1
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-19 10:30:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-19 10:30:00"
+
+        - insert:
+            tableName: filled_form
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: form_id
+                  value: 2
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-19 11:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-19 11:00:00"
+
+  - changeSet:
+      id: 9
+      author: mona
+      changes:
+        - insert:
+            tableName: field
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: form_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Name"
+              - column:
+                  name: display_order
+                  value: 1
+              - column:
+                  name: type
+                  value: "TEXT"
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-18 10:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-18 10:00:00"
+
+        - insert:
+            tableName: field
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: form_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Age"
+              - column:
+                  name: display_order
+                  value: 2
+              - column:
+                  name: type
+                  value: "NUMBER"
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-18 10:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-18 10:00:00"
+
+  - changeSet:
+      id: 10
+      author: mona
+      changes:
+        - insert:
+            tableName: filled_field
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: filled_form_id
+                  value: 1
+              - column:
+                  name: field_id
+                  value: 1
+              - column:
+                  name: text_value
+                  value: "John Doe"
+              - column:
+                  name: number_value
+                  value: null
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-19 10:30:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-19 10:30:00"
+
+        - insert:
+            tableName: filled_field
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: filled_form_id
+                  value: 1
+              - column:
+                  name: field_id
+                  value: 2
+              - column:
+                  name: text_value
+                  value: null
+              - column:
+                  name: number_value
+                  value: 29
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-19 10:30:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-19 10:30:00"
+
+  - changeSet:
+      id: 11
+      author: mona
+      changes:
+        - insert:
+            tableName: statistics
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: date
+                  valueDate: "2024-11-19"
+              - column:
+                  name: filled_forms_count
+                  value: 2
+
+  - changeSet:
+      id: 12
+      author: mona
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password
+                  value: "$2a$12$Xrom08YuSNPnOdHfJVdquuDzZ.HIP6LoEvqcseua2G02KOX/T/b6C" #password
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-17 08:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-17 08:00:00"
+
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: username
+                  value: "user"
+              - column:
+                  name: password
+                  value: "$2a$12$lIGlPWyqRLvaGLLm1IDS1OLaSJzXRKJABK9kgjf5DcFXJfmGQFHG6" #pass123
+              - column:
+                  name: created_at
+                  valueDate: "2024-11-17 09:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2024-11-17 09:00:00"

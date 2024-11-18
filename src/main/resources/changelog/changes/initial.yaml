@@ -1,0 +1,223 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: mona
+      changes:
+        - createTable:
+            tableName: form
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 2
+      author: mona
+      changes:
+        - createTable:
+            tableName: filled_form
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: form_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: filled_form
+            baseColumnNames: form_id
+            referencedTableName: form
+            referencedColumnNames: id
+            constraintName: fk_filled_form_form
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: 3
+      author: mona
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 4
+      author: mona
+      changes:
+        - createTable:
+            tableName: field
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: form_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_order
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: ENUM('TEXT', 'NUMBER')
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: field
+            baseColumnNames: form_id
+            referencedTableName: form
+            referencedColumnNames: id
+            constraintName: fk_field_form
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: 5
+      author: mona
+      changes:
+        - createTable:
+            tableName: filled_field
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: filled_form_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: field_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text_value
+                  type: VARCHAR(256)
+              - column:
+                  name: number_value
+                  type: DOUBLE
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: filled_field
+            baseColumnNames: filled_form_id
+            referencedTableName: filled_form
+            referencedColumnNames: id
+            constraintName: fk_filled_field_filled_form
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: filled_field
+            baseColumnNames: field_id
+            referencedTableName: field
+            referencedColumnNames: id
+            constraintName: fk_filled_field_field
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: 6
+      author: mona
+      changes:
+        - createTable:
+            tableName: statistics
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: filled_forms_count
+                  type: INT
+                  constraints:
+                    nullable: false

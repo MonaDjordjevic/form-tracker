@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: form-tracker
+
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    hikari:
+      connection-timeout: 30000
+    url: jdbc:mysql://localhost:3306/form_tracker
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  liquibase:
+    enabled: true
+    drop-first: false
+    change-log: classpath:/changelog/db.changelog-local.yaml
+
+server:
+  servlet:
+    context-path: /form-tracker
+  error:
+    include-message: always
+    include-binding-errors: always
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    root: INFO
+    liquibase: DEBUG
+    com.marketplace: DEBUG
+    org.springframework.security: DEBUG
+
+jwt:
+  secret: "c2VjcmV0MTIzc2VjcmV0MTIzc2VjcmV0MTIzc2VjcmV0MTIz"
+
+

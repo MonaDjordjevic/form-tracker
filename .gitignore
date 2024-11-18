@@ -1,0 +1,28 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# OS-specific files
+.DS_Store   # macOS
+
+# Maven wrapper
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+target/
+
+# Java class files
+*.class
+*.ctxt
+*.ear
+*.jar
+*.log
+*.war
+
+# Java JAR files
+*.jar
+*.war
+
+### VS Code ###
+.vscode/
