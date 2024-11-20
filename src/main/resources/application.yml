@@ -4,7 +4,8 @@ spring:
 
   main:
     allow-bean-definition-overriding: true
-
+  jackson:
+    time-zone: Europe/Belgrade
   datasource:
     hikari:
       connection-timeout: 30000
@@ -36,7 +37,5 @@ logging:
     com.marketplace: DEBUG
     org.springframework.security: DEBUG
 
-jwt:
-  secret: "c2VjcmV0MTIzc2VjcmV0MTIzc2VjcmV0MTIzc2VjcmV0MTIz"
 
 
