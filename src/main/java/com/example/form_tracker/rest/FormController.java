@@ -3,6 +3,7 @@ package com.example.form_tracker.rest;
 import com.example.form_tracker.converter.impl.FormConverter;
 import com.example.form_tracker.rest.dto.FormDto;
 import com.example.form_tracker.service.FormService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -17,6 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/forms")
+@SecurityRequirement(name = "Authorization")
 public class FormController {
 
     private final FormService formService;

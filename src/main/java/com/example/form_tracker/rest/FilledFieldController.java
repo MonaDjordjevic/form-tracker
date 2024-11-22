@@ -4,6 +4,7 @@ import com.example.form_tracker.converter.impl.FilledFieldConverter;
 import com.example.form_tracker.rest.dto.FilledFieldDto;
 import com.example.form_tracker.rest.dto.UpdateFilledFieldDto;
 import com.example.form_tracker.service.FilledFieldService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/filled-fields")
+@SecurityRequirement(name = "Authorization")
 public class FilledFieldController {
 
     private final FilledFieldService filledFieldService;

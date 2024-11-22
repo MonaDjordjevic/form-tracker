@@ -36,6 +36,7 @@ logging:
     liquibase: DEBUG
     com.marketplace: DEBUG
     org.springframework.security: DEBUG
-
+jwt:
+  secret: "c2VjcmV0MTIzc2VjcmV0MTIzc2VjcmV0MTIzc2VjcmV0MTIz"
 
 

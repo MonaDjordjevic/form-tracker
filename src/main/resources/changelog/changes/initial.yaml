@@ -221,3 +221,17 @@ databaseChangeLog:
                   type: INT
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 7
+      author: mona
+      changes:
+        - addColumn:
+            tableName: user
+            columns:
+              - column:
+                  name: role
+                  type: ENUM('ADMIN', 'WORKER')
+                  constraints:
+                    nullable: false
+                  defaultValue: 'WORKER'
+

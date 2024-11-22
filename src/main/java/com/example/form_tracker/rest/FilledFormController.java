@@ -3,6 +3,7 @@ package com.example.form_tracker.rest;
 import com.example.form_tracker.converter.impl.FilledFormConverter;
 import com.example.form_tracker.rest.dto.FilledFormDto;
 import com.example.form_tracker.service.FilledFormService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -17,6 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/filled-forms")
+@SecurityRequirement(name = "Authorization")
 public class FilledFormController {
 
     private final FilledFormService filledFormService;

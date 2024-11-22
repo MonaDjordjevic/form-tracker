@@ -237,3 +237,22 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   valueDate: "2024-11-17 09:00:00"
+  - changeSet:
+      id: 13
+      author: mona
+      changes:
+        - update:
+            tableName: user
+            columns:
+              - column:
+                  name: role
+                  value: 'ADMIN'
+            where: "username = 'admin'"
+
+        - update:
+            tableName: user
+            columns:
+              - column:
+                  name: role
+                  value: 'WORKER'
+            where: "username = 'user'"
