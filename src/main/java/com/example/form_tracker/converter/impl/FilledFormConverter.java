@@ -27,6 +27,8 @@ public class FilledFormConverter implements DtoEntityConverter<FilledFormDto, Fi
                 .formId(filledForm.getForm().getId())
                 .formName(filledForm.getForm().getName())
                 .filledFields(filledFieldDtos)
+                .createdBy(filledForm.getCreatedBy())
+                .lastUpdatedBy(filledForm.getLastUpdatedBy())
                 .build();
     }
 

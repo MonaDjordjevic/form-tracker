@@ -7,6 +7,7 @@ import com.example.form_tracker.model.FilledForm;
 import com.example.form_tracker.repository.FilledFieldRepository;
 import com.example.form_tracker.rest.dto.FilledFieldDto;
 import com.example.form_tracker.rest.dto.UpdateFilledFieldDto;
+import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FieldService;
 import com.example.form_tracker.service.FilledFieldService;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,7 @@ public class FilledFieldServiceImpl implements FilledFieldService {
 
     private final FilledFieldRepository filledFieldRepository;
     private final FieldService fieldService;
+    private final CurrentUserUtil currentUserUtil;
 
     @Override
     public FilledField getFilledFieldById(Integer id) {
@@ -42,11 +44,14 @@ public class FilledFieldServiceImpl implements FilledFieldService {
 
     @Override
     public FilledField saveFilledField(Field field, FilledFieldDto filledFieldDto, FilledForm filledForm) {
+        var userId = currentUserUtil.getCurrentUserId();
         var filledField = FilledField.builder()
                 .field(field)
                 .filledForm(filledForm)
                 .createdAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .updatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .createdBy(userId)
+                .lastUpdatedBy(userId)
                 .build();
 
         validateAndAssignValues(filledFieldDto.getNumberValue(), filledFieldDto.getTextValue(), filledField);
@@ -58,6 +63,8 @@ public class FilledFieldServiceImpl implements FilledFieldService {
         var filledFieldToUpdate = getFilledFieldById(id);
         validateAndAssignValues(updateFilledFieldDto.getNumberValue(), updateFilledFieldDto.getTextValue(), filledFieldToUpdate);
 
+        var userId = currentUserUtil.getCurrentUserId();
+        filledFieldToUpdate.setLastUpdatedBy(userId);
         filledFieldToUpdate.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         return filledFieldRepository.save(filledFieldToUpdate);
     }

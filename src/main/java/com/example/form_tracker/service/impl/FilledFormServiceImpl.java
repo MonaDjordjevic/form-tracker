@@ -3,6 +3,7 @@ package com.example.form_tracker.service.impl;
 import com.example.form_tracker.model.FilledForm;
 import com.example.form_tracker.repository.FilledFormRepository;
 import com.example.form_tracker.rest.dto.FilledFormDto;
+import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FilledFieldService;
 import com.example.form_tracker.service.FilledFormService;
 import com.example.form_tracker.service.FormService;
@@ -23,15 +24,19 @@ public class FilledFormServiceImpl implements FilledFormService {
     private final FilledFormRepository filledFormRepository;
     private final FilledFieldService filledFieldService;
     private final FormService formService;
+    private final CurrentUserUtil currentUserUtil;
 
     @Override
     public FilledForm createFilledForm(Integer formId, FilledFormDto filledFormDto) {
+        var userId = currentUserUtil.getCurrentUserId();
         var form = formService.getFormById(formId);
         var now = LocalDateTime.now();
         var filledForm = FilledForm.builder()
                 .form(form)
                 .createdAt(now)
                 .updatedAt(now)
+                .createdBy(userId)
+                .lastUpdatedBy(userId)
                 .build();
 
         var fieldsMap = filledFieldService.validateAndRetrieveFields(filledFormDto.getFilledFields(), formId);

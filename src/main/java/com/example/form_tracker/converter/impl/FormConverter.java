@@ -15,6 +15,8 @@ public class FormConverter implements DtoEntityConverter<FormDto, Form> {
                 .name(form.getName())
                 .createdAt(form.getCreatedAt())
                 .updatedAt(form.getUpdatedAt())
+                .createdBy(form.getCreatedBy())
+                .lastUpdatedBy(form.getLastUpdatedBy())
                 .build();
     }
 

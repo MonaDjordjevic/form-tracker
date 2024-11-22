@@ -2,6 +2,7 @@ package com.example.form_tracker.service.impl;
 
 import com.example.form_tracker.model.Form;
 import com.example.form_tracker.repository.FormRepository;
+import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FormService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import static java.lang.String.format;
 public class FormServiceImpl implements FormService {
 
     private final FormRepository formRepository;
+    private final CurrentUserUtil currentUserUtil;
 
     @Override
     public Form getFormById(Integer id) {
@@ -30,8 +32,11 @@ public class FormServiceImpl implements FormService {
     @Override
     public Form createForm(Form form) {
         var now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        var userId = currentUserUtil.getCurrentUserId();
         form.setCreatedAt(now);
         form.setUpdatedAt(now);
+        form.setCreatedBy(userId);
+        form.setLastUpdatedBy(userId);
         return formRepository.save(form);
     }
 
@@ -43,8 +48,10 @@ public class FormServiceImpl implements FormService {
     @Override
     public Form updateForm(Integer id, Form form) {
         var existingForm = getFormById(id);
+        var userId = currentUserUtil.getCurrentUserId();
         existingForm.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         Optional.ofNullable(form.getName()).ifPresent(existingForm::setName);
+        form.setLastUpdatedBy(userId);
         return formRepository.save(existingForm);
     }
 

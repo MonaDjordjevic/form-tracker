@@ -40,4 +40,10 @@ public class FieldDto {
     @Schema(type = "string", pattern = "dd.MM.yyyy HH:mm", example = "20.11.2024 00:00")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime updatedAt;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer createdBy;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer lastUpdatedBy;
 }

@@ -2,6 +2,7 @@ package com.example.form_tracker.service.impl;
 
 import com.example.form_tracker.model.Field;
 import com.example.form_tracker.repository.FieldRepository;
+import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FieldService;
 import com.example.form_tracker.service.FormService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,15 +22,19 @@ public class FieldServiceImpl implements FieldService {
 
     private final FieldRepository fieldRepository;
     private final FormService formService;
+    private final CurrentUserUtil currentUserUtil;
 
     @Override
     public Field createField(Integer formId, Field field) {
         var form = formService.getFormById(formId);
         validateUniqueDisplayOrder(formId, field);
         var now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        var userId = currentUserUtil.getCurrentUserId();
         field.setForm(form);
         field.setCreatedAt(now);
         field.setUpdatedAt(now);
+        field.setCreatedBy(userId);
+        field.setLastUpdatedBy(userId);
 
         return fieldRepository.save(field);
     }
@@ -48,9 +53,11 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public Field updateField(Integer id, Field field) {
         var existingField = getFieldById(id);
+        var userId = currentUserUtil.getCurrentUserId();
         validateUniqueDisplayOrder(existingField.getForm().getId(), field);
         applyNonNullProperties(field, existingField);
         existingField.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        field.setLastUpdatedBy(userId);
         return fieldRepository.save(existingField);
     }
 

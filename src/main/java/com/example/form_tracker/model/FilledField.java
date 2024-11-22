@@ -33,5 +33,11 @@ public class FilledField {
     @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @Column(name = "created_by_user_id", nullable = false)
+    private Integer createdBy;
+
+    @Column(name = "last_updated_by_user_id", nullable = false)
+    private Integer lastUpdatedBy;
 }
 

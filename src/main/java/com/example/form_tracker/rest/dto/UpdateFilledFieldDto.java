@@ -20,5 +20,8 @@ public class UpdateFilledFieldDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(type = "string", pattern = "dd.MM.yyyy HH:mm", example = "20.11.2024 00:00")
     private LocalDateTime updatedAt;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer lastUpdatedBy;
 }
 

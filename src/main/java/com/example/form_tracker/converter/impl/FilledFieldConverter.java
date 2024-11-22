@@ -25,6 +25,8 @@ public class FilledFieldConverter implements DtoEntityConverter<FilledFieldDto, 
                 .numberValue(filledField.getNumberValue())
                 .createdAt(filledField.getCreatedAt())
                 .updatedAt(filledField.getUpdatedAt())
+                .lastUpdatedBy(filledField.getLastUpdatedBy())
+                .createdBy(filledField.getCreatedBy())
                 .build();
     }
 

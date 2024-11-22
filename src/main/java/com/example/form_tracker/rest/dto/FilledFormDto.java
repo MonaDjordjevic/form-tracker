@@ -32,4 +32,10 @@ public class FilledFormDto {
 
     @NotEmpty(message = "Filled fields must not be empty")
     private List<FilledFieldDto> filledFields;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer createdBy;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer lastUpdatedBy;
 }

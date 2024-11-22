@@ -235,3 +235,59 @@ databaseChangeLog:
                     nullable: false
                   defaultValue: 'WORKER'
 
+  - changeSet:
+      id: 8
+      author: mona
+      changes:
+        - addColumn:
+            tableName: form
+            columns:
+              - column:
+                  name: created_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: filled_form
+            columns:
+              - column:
+                  name: created_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: field
+            columns:
+              - column:
+                  name: created_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: filled_field
+            columns:
+              - column:
+                  name: created_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated_by_user_id
+                  type: INT
+                  constraints:
+                    nullable: false

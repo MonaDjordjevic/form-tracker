@@ -22,6 +22,8 @@ public class FieldConverter implements DtoEntityConverter<FieldDto, Field> {
                 .createdAt(field.getCreatedAt())
                 .displayOrder(field.getDisplayOrder())
                 .updatedAt(field.getUpdatedAt())
+                .createdBy(field.getCreatedBy())
+                .lastUpdatedBy(field.getLastUpdatedBy())
                 .build();
     }
 
