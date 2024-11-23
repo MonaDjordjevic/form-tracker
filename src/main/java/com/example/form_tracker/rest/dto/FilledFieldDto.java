@@ -2,25 +2,27 @@ package com.example.form_tracker.rest.dto;
 
 import com.example.form_tracker.model.FieldType;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
+
 @Data
-@Builder
-public class FilledFieldDto {
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Integer id;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Integer filledFormId;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String formName;
+@SuperBuilder
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "fieldType", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = TextFilledFieldDto.class, name = "TEXT"),
+        @JsonSubTypes.Type(value = NumberFilledFieldDto.class, name = "NUMBER")
+})
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class FilledFieldDto {
 
     private Integer fieldId;
 
@@ -30,14 +32,10 @@ public class FilledFieldDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer displayOrder;
 
+    private FieldType fieldType;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private FieldType type;
-
-    @Schema(description = "Enter text value if the field type is TEXT. Leave empty if the field type is NUMBER.")
-    private String textValue;
-
-    @Schema(description = "Enter number value if the field type is NUMBER. Leave empty if the field type is TEXT.")
-    private Double numberValue;
+    private Integer filledFormId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(type = "string", pattern = "dd.MM.yyyy HH:mm", example = "20.11.2024 00:00")

@@ -1,8 +1,11 @@
 package com.example.form_tracker.converter.impl;
 
 import com.example.form_tracker.converter.DtoEntityConverter;
+import com.example.form_tracker.model.FieldType;
 import com.example.form_tracker.model.FilledField;
 import com.example.form_tracker.rest.dto.FilledFieldDto;
+import com.example.form_tracker.rest.dto.NumberFilledFieldDto;
+import com.example.form_tracker.rest.dto.TextFilledFieldDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,28 +16,43 @@ public class FilledFieldConverter implements DtoEntityConverter<FilledFieldDto, 
 
     @Override
     public FilledFieldDto toDto(FilledField filledField) {
-        return FilledFieldDto.builder()
-                .id(filledField.getId())
-                .textValue(filledField.getTextValue())
-                .fieldId(filledField.getField().getId())
-                .fieldName(filledField.getField().getName())
-                .displayOrder(filledField.getField().getDisplayOrder())
-                .type(filledField.getField().getType())
-                .filledFormId(filledField.getFilledForm().getId())
-                .formName(filledField.getFilledForm().getForm().getName())
-                .numberValue(filledField.getNumberValue())
-                .createdAt(filledField.getCreatedAt())
-                .updatedAt(filledField.getUpdatedAt())
-                .lastUpdatedBy(filledField.getLastUpdatedBy())
-                .createdBy(filledField.getCreatedBy())
-                .build();
+        if (filledField.getField().getType() == FieldType.TEXT) {
+            return TextFilledFieldDto.builder()
+                    .textValue(filledField.getTextValue())
+                    .fieldName(filledField.getField().getName())
+                    .fieldId(filledField.getField().getId())
+                    .filledFormId(filledField.getFilledForm().getId())
+                    .fieldType(FieldType.TEXT)
+                    .displayOrder(filledField.getField().getDisplayOrder())
+                    .createdAt(filledField.getCreatedAt())
+                    .updatedAt(filledField.getUpdatedAt())
+                    .createdAt(filledField.getCreatedAt())
+                    .createdBy(filledField.getCreatedBy())
+                    .lastUpdatedBy(filledField.getLastUpdatedBy())
+                    .build();
+        } else {
+            return NumberFilledFieldDto.builder()
+                    .numberValue(filledField.getNumberValue())
+                    .fieldName(filledField.getField().getName())
+                    .fieldId(filledField.getField().getId())
+                    .filledFormId(filledField.getFilledForm().getId())
+                    .fieldType(FieldType.NUMBER)
+                    .displayOrder(filledField.getField().getDisplayOrder())
+                    .createdAt(filledField.getCreatedAt())
+                    .updatedAt(filledField.getUpdatedAt())
+                    .createdAt(filledField.getCreatedAt())
+                    .createdBy(filledField.getCreatedBy())
+                    .lastUpdatedBy(filledField.getLastUpdatedBy())
+                    .build();
+        }
     }
 
     @Override
     public FilledField toEntity(FilledFieldDto filledFieldDto) {
-        return FilledField.builder()
-                .textValue(filledFieldDto.getTextValue())
-                .numberValue(filledFieldDto.getNumberValue())
-                .build();
+        if (filledFieldDto instanceof TextFilledFieldDto) {
+            return FilledField.builder().textValue(((TextFilledFieldDto) filledFieldDto).getTextValue()).build();
+        } else {
+            return FilledField.builder().numberValue(((NumberFilledFieldDto) filledFieldDto).getNumberValue()).build();
+        }
     }
 }
