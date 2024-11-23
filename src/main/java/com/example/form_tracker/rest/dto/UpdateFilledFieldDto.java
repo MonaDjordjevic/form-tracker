@@ -9,6 +9,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Schema(
+        example = """
+        {
+          "textValue": "Example text"
+        }
+        """
+)
 public class UpdateFilledFieldDto {
 
     @Schema(description = "Enter text value if the field type is TEXT. Leave empty if the field type is NUMBER.")

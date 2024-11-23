@@ -1,6 +1,8 @@
 package com.example.form_tracker.rest;
 
+import com.example.form_tracker.converter.impl.FieldConverter;
 import com.example.form_tracker.converter.impl.FormConverter;
+import com.example.form_tracker.rest.dto.FieldDto;
 import com.example.form_tracker.rest.dto.FormDto;
 import com.example.form_tracker.service.FormService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -23,12 +25,25 @@ public class FormController {
 
     private final FormService formService;
     private final FormConverter formConverter;
+    private final FieldConverter fieldConverter;
 
     @PostMapping
     @ResponseStatus(CREATED)
     public FormDto createForm(@Valid @RequestBody FormDto formDto) {
         var form = formConverter.toEntity(formDto);
         return formConverter.toDto(formService.createForm(form));
+    }
+
+    @PostMapping("/{formId}/fields")
+    @ResponseStatus(CREATED)
+    public List<FieldDto> createFields(@PathVariable Integer formId, @Valid @RequestBody List<FieldDto> fieldDtos) {
+        var fields = fieldDtos.stream()
+                .map(fieldConverter::toEntity)
+                .toList();
+        var createdFields = formService.createFieldsBatch(formId, fields);
+        return createdFields.stream()
+                .map(fieldConverter::toDto)
+                .toList();
     }
 
     @GetMapping("/{id}")

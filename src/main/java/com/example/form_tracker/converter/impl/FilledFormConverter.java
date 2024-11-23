@@ -16,7 +16,7 @@ public class FilledFormConverter implements DtoEntityConverter<FilledFormDto, Fi
 
     @Override
     public FilledFormDto toDto(FilledForm filledForm) {
-        var filledFieldDtos = filledFieldService.findByFilledFormId(filledForm.getId())
+        var fieldDtoList = filledFieldService.findByFilledFormId(filledForm.getId())
                 .stream()
                 .map(filledFieldConverter::toDto)
                 .toList();
@@ -26,7 +26,7 @@ public class FilledFormConverter implements DtoEntityConverter<FilledFormDto, Fi
                 .createdAt(filledForm.getCreatedAt())
                 .formId(filledForm.getForm().getId())
                 .formName(filledForm.getForm().getName())
-                .filledFields(filledFieldDtos)
+                .filledFields(fieldDtoList)
                 .createdBy(filledForm.getCreatedBy())
                 .lastUpdatedBy(filledForm.getLastUpdatedBy())
                 .build();

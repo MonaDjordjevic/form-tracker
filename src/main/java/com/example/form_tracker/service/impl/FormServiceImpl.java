@@ -1,8 +1,10 @@
 package com.example.form_tracker.service.impl;
 
+import com.example.form_tracker.model.Field;
 import com.example.form_tracker.model.Form;
 import com.example.form_tracker.repository.FormRepository;
 import com.example.form_tracker.security.CurrentUserUtil;
+import com.example.form_tracker.service.FieldService;
 import com.example.form_tracker.service.FormService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,7 @@ public class FormServiceImpl implements FormService {
 
     private final FormRepository formRepository;
     private final CurrentUserUtil currentUserUtil;
+    private final FieldService fieldService;
 
     @Override
     public Form getFormById(Integer id) {
@@ -59,5 +62,13 @@ public class FormServiceImpl implements FormService {
     public void deleteForm(Integer id) {
         var form = getFormById(id);
         formRepository.delete(form);
+    }
+
+    @Override
+    public List<Field> createFieldsBatch(Integer formId, List<Field> fields) {
+        var form = getFormById(formId);
+        return fields.stream()
+                .map(field -> fieldService.createField(form, field))
+                .toList();
     }
 }

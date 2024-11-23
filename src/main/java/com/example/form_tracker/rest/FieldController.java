@@ -4,7 +4,6 @@ import com.example.form_tracker.converter.impl.FieldConverter;
 import com.example.form_tracker.rest.dto.FieldDto;
 import com.example.form_tracker.service.FieldService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +24,6 @@ public class FieldController {
     @ResponseStatus(OK)
     public FieldDto getFieldById(@PathVariable Integer id) {
         return fieldConverter.toDto(fieldService.getFieldById(id));
-    }
-
-    @PostMapping("/form/{formId}")
-    @ResponseStatus(CREATED)
-    public FieldDto createField(@PathVariable Integer formId, @Valid @RequestBody FieldDto fieldDto) {
-        var field = fieldConverter.toEntity(fieldDto);
-        return fieldConverter.toDto(fieldService.createField(formId, field));
     }
 
     @GetMapping

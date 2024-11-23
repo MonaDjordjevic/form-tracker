@@ -1,10 +1,10 @@
 package com.example.form_tracker.service.impl;
 
 import com.example.form_tracker.model.Field;
+import com.example.form_tracker.model.Form;
 import com.example.form_tracker.repository.FieldRepository;
 import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FieldService;
-import com.example.form_tracker.service.FormService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,11 @@ import static java.lang.String.format;
 public class FieldServiceImpl implements FieldService {
 
     private final FieldRepository fieldRepository;
-    private final FormService formService;
     private final CurrentUserUtil currentUserUtil;
 
     @Override
-    public Field createField(Integer formId, Field field) {
-        var form = formService.getFormById(formId);
-        validateUniqueDisplayOrder(formId, field);
+    public Field createField(Form form, Field field) {
+        validateUniqueDisplayOrder(form.getId(), field);
         var now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         var userId = currentUserUtil.getCurrentUserId();
         field.setForm(form);
@@ -59,6 +57,11 @@ public class FieldServiceImpl implements FieldService {
         existingField.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         field.setLastUpdatedBy(userId);
         return fieldRepository.save(existingField);
+    }
+
+    @Override
+    public List<Field> findByFormId(Integer id) {
+        return fieldRepository.findByFormId(id);
     }
 
     @Override
