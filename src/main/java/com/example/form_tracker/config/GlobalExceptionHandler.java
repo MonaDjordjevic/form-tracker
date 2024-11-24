@@ -1,6 +1,7 @@
 package com.example.form_tracker.config;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
         var errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> String.format("Field %s: %s", fieldError.getField(), fieldError.getDefaultMessage()))
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ValidationErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation failed for the request.",
+                errors
+        ));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+        var errors = ex.getConstraintViolations().stream()
+                .map(violation -> String.format("%s: %s", violation.getPropertyPath(), violation.getMessage()))
                 .toList();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ValidationErrorResponse(

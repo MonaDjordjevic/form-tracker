@@ -2,7 +2,7 @@ package com.example.form_tracker.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class FormDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 
-    @NotNull(message = "Name must not be null.")
+    @NotBlank(message = "Name must not be blank.")
     private String name;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

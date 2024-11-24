@@ -52,6 +52,9 @@ public class FieldServiceImpl implements FieldService {
     public Field updateField(Integer id, Field field) {
         var existingField = getFieldById(id);
         var userId = currentUserUtil.getCurrentUserId();
+        if (field.getName() != null && field.getName().isBlank()) {
+            throw new IllegalArgumentException("Field name must not be blank.");
+        }
         validateUniqueDisplayOrder(existingField.getForm().getId(), field);
         applyNonNullProperties(field, existingField);
         existingField.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));

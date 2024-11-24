@@ -18,6 +18,7 @@ public class FilledFieldConverter implements DtoEntityConverter<FilledFieldDto, 
     public FilledFieldDto toDto(FilledField filledField) {
         if (filledField.getField().getType() == FieldType.TEXT) {
             return TextFilledFieldDto.builder()
+                    .id(filledField.getId())
                     .textValue(filledField.getTextValue())
                     .fieldName(filledField.getField().getName())
                     .fieldId(filledField.getField().getId())
@@ -32,6 +33,7 @@ public class FilledFieldConverter implements DtoEntityConverter<FilledFieldDto, 
                     .build();
         } else {
             return NumberFilledFieldDto.builder()
+                    .id(filledField.getId())
                     .numberValue(filledField.getNumberValue())
                     .fieldName(filledField.getField().getName())
                     .fieldId(filledField.getField().getId())

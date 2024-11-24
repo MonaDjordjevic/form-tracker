@@ -2,6 +2,7 @@ package com.example.form_tracker.rest;
 
 import com.example.form_tracker.rest.dto.AuthRequest;
 import com.example.form_tracker.security.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +21,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public String authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
+    public String authenticate(@Valid @RequestBody AuthRequest authRequest) throws AuthenticationException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );

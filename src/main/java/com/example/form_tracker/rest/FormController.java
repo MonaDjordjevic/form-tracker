@@ -7,6 +7,7 @@ import com.example.form_tracker.rest.dto.FormDto;
 import com.example.form_tracker.service.FormService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +37,8 @@ public class FormController {
 
     @PostMapping("/{formId}/fields")
     @ResponseStatus(CREATED)
-    public List<FieldDto> createFields(@PathVariable Integer formId, @Valid @RequestBody List<FieldDto> fieldDtos) {
-        var fields = fieldDtos.stream()
+    public List<FieldDto> createFields(@PathVariable Integer formId, @RequestBody @NotEmpty(message = "Input field list cannot be empty.") List<@Valid FieldDto> fieldDtoList) {
+        var fields = fieldDtoList.stream()
                 .map(fieldConverter::toEntity)
                 .toList();
         var createdFields = formService.createFieldsBatch(formId, fields);
@@ -63,7 +64,7 @@ public class FormController {
 
     @PutMapping("/{id}")
     @ResponseStatus(OK)
-    public FormDto updateForm(@PathVariable Integer id, @RequestBody FormDto formDto) {
+    public FormDto updateForm(@PathVariable Integer id, @Valid @RequestBody FormDto formDto) {
         var form = formConverter.toEntity(formDto);
         return formConverter.toDto(formService.updateForm(id, form));
     }

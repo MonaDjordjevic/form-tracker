@@ -6,8 +6,6 @@ import com.example.form_tracker.model.FilledField;
 import com.example.form_tracker.model.FilledForm;
 import com.example.form_tracker.repository.FilledFieldRepository;
 import com.example.form_tracker.rest.dto.FilledFieldDto;
-import com.example.form_tracker.rest.dto.NumberFilledFieldDto;
-import com.example.form_tracker.rest.dto.TextFilledFieldDto;
 import com.example.form_tracker.rest.dto.UpdateFilledFieldDto;
 import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FieldService;
@@ -55,13 +53,7 @@ public class FilledFieldServiceImpl implements FilledFieldService {
                 .createdBy(userId)
                 .lastUpdatedBy(userId)
                 .build();
-        validateFieldType(field, filledFieldDto);
 
-        if (filledFieldDto instanceof TextFilledFieldDto textField) {
-            setFieldValue(null, textField.getTextValue(), filledField);
-        } else if (filledFieldDto instanceof NumberFilledFieldDto numberField) {
-            setFieldValue(numberField.getNumberValue(), null, filledField);
-        }
         return filledFieldRepository.save(filledField);
     }
 
@@ -110,13 +102,7 @@ public class FilledFieldServiceImpl implements FilledFieldService {
         return field;
     }
 
-    private static void validateFieldType(Field field, FilledFieldDto filledFieldDto) {
-        if (field.getType() != filledFieldDto.getFieldType()) {
-            throw new IllegalArgumentException(format("Wrong type for field with id: %s", field.getId()));
-        }
-    }
-
-    private static void setFieldValue(Double numberValue, String textValue, FilledField filledFieldToUpdate) {
+    private void setFieldValue(Double numberValue, String textValue, FilledField filledFieldToUpdate) {
         var fieldType = filledFieldToUpdate.getField().getType();
         if (fieldType == FieldType.TEXT) {
             Assert.notNull(textValue, "Text value must not be null for a field of type TEXT.");

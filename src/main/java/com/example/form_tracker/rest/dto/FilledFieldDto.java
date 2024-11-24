@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "fieldType", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = TextFilledFieldDto.class, name = "TEXT"),
         @JsonSubTypes.Type(value = NumberFilledFieldDto.class, name = "NUMBER")
@@ -23,6 +23,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class FilledFieldDto {
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer id;
 
     private Integer fieldId;
 
@@ -32,6 +35,7 @@ public abstract class FilledFieldDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer displayOrder;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private FieldType fieldType;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

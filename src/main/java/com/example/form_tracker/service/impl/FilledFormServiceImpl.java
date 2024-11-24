@@ -1,8 +1,12 @@
 package com.example.form_tracker.service.impl;
 
+import com.example.form_tracker.model.Field;
 import com.example.form_tracker.model.FilledForm;
 import com.example.form_tracker.repository.FilledFormRepository;
+import com.example.form_tracker.rest.dto.FilledFieldDto;
 import com.example.form_tracker.rest.dto.FilledFormDto;
+import com.example.form_tracker.rest.dto.NumberFilledFieldDto;
+import com.example.form_tracker.rest.dto.TextFilledFieldDto;
 import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FilledFieldService;
 import com.example.form_tracker.service.FilledFormService;
@@ -11,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,9 +47,10 @@ public class FilledFormServiceImpl implements FilledFormService {
         var fieldsMap = filledFieldService.validateAndRetrieveFields(filledFormDto.getFilledFields(), formId);
         var savedFilledForm = filledFormRepository.save(filledForm);
 
-        filledFormDto.getFilledFields().forEach(filledFieldDto ->
-                filledFieldService.saveFilledField(fieldsMap.get(filledFieldDto), filledFieldDto, savedFilledForm)
-        );
+        filledFormDto.getFilledFields().forEach(filledFieldDto -> {
+            validateFieldType(fieldsMap.get(filledFieldDto), filledFieldDto);
+            filledFieldService.saveFilledField(fieldsMap.get(filledFieldDto), filledFieldDto, savedFilledForm);
+        });
         return savedFilledForm;
     }
 
@@ -63,5 +69,20 @@ public class FilledFormServiceImpl implements FilledFormService {
     public void deleteFilledForm(Integer id) {
         var filledForm = getFilledFormById(id);
         filledFormRepository.delete(filledForm);
+    }
+
+    private void validateFieldType(Field field, FilledFieldDto filledFieldDto) {
+        if (field.getType() != filledFieldDto.getFieldType()) {
+            throw new IllegalArgumentException(format("Field with id %s is not type: %s, you have to provide value for type: %s", field.getId(), filledFieldDto.getFieldType(), field.getType()));
+        }
+        validateNotNullValue(filledFieldDto);
+    }
+
+    public void validateNotNullValue(FilledFieldDto filledFieldDto) {
+        if (filledFieldDto instanceof TextFilledFieldDto textField) {
+            Assert.notNull(textField.getTextValue(), "Text value must not be null for a field of type TEXT.");
+        } else if (filledFieldDto instanceof NumberFilledFieldDto numberField) {
+            Assert.notNull(numberField.getNumberValue(), "Number value must not be null for a field of type NUMBER.");
+        }
     }
 }
