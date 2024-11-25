@@ -6,6 +6,8 @@ import com.example.form_tracker.model.FilledField;
 import com.example.form_tracker.model.FilledForm;
 import com.example.form_tracker.repository.FilledFieldRepository;
 import com.example.form_tracker.rest.dto.FilledFieldDto;
+import com.example.form_tracker.rest.dto.NumberFilledFieldDto;
+import com.example.form_tracker.rest.dto.TextFilledFieldDto;
 import com.example.form_tracker.rest.dto.UpdateFilledFieldDto;
 import com.example.form_tracker.security.CurrentUserUtil;
 import com.example.form_tracker.service.FieldService;
@@ -54,6 +56,11 @@ public class FilledFieldServiceImpl implements FilledFieldService {
                 .lastUpdatedBy(userId)
                 .build();
 
+        if (filledFieldDto instanceof TextFilledFieldDto textFilledFieldDto) {
+            filledField.setTextValue(textFilledFieldDto.getTextValue());
+        } else if(filledFieldDto instanceof NumberFilledFieldDto numberFilledFieldDto) {
+            filledField.setNumberValue(numberFilledFieldDto.getNumberValue());
+        }
         return filledFieldRepository.save(filledField);
     }
 
@@ -105,7 +112,7 @@ public class FilledFieldServiceImpl implements FilledFieldService {
     private void setFieldValue(Double numberValue, String textValue, FilledField filledFieldToUpdate) {
         var fieldType = filledFieldToUpdate.getField().getType();
         if (fieldType == FieldType.TEXT) {
-            Assert.notNull(textValue, "Text value must not be null for a field of type TEXT.");
+            Assert.hasText(textValue, "Text value must not be blank for a field of type TEXT.");
             Assert.isNull(numberValue, "Cannot update number value for a field of type TEXT.");
             filledFieldToUpdate.setTextValue(textValue);
         } else if (fieldType == FieldType.NUMBER) {

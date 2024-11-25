@@ -12,12 +12,14 @@ import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Validated
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/forms")

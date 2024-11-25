@@ -1,6 +1,7 @@
 package com.example.form_tracker.service.impl;
 
 import com.example.form_tracker.model.Field;
+import com.example.form_tracker.model.FieldType;
 import com.example.form_tracker.model.FilledForm;
 import com.example.form_tracker.repository.FilledFormRepository;
 import com.example.form_tracker.rest.dto.FilledFieldDto;
@@ -48,7 +49,7 @@ public class FilledFormServiceImpl implements FilledFormService {
         var savedFilledForm = filledFormRepository.save(filledForm);
 
         filledFormDto.getFilledFields().forEach(filledFieldDto -> {
-            validateFieldType(fieldsMap.get(filledFieldDto), filledFieldDto);
+            validateFieldTypeAndValue(fieldsMap.get(filledFieldDto), filledFieldDto);
             filledFieldService.saveFilledField(fieldsMap.get(filledFieldDto), filledFieldDto, savedFilledForm);
         });
         return savedFilledForm;
@@ -71,18 +72,28 @@ public class FilledFormServiceImpl implements FilledFormService {
         filledFormRepository.delete(filledForm);
     }
 
-    private void validateFieldType(Field field, FilledFieldDto filledFieldDto) {
-        if (field.getType() != filledFieldDto.getFieldType()) {
-            throw new IllegalArgumentException(format("Field with id %s is not type: %s, you have to provide value for type: %s", field.getId(), filledFieldDto.getFieldType(), field.getType()));
+    private void validateFieldTypeAndValue(Field field, FilledFieldDto filledFieldDto) {
+        var expectedType = field.getType();
+        if (expectedType == FieldType.NUMBER) {
+            validateNumberField(filledFieldDto, field);
+        } else if (expectedType == FieldType.TEXT) {
+            validateTextField(filledFieldDto, field);
+        } else {
+            throw new IllegalArgumentException(format("Unsupported field type: %s", expectedType));
         }
-        validateNotNullValue(filledFieldDto);
     }
 
-    public void validateNotNullValue(FilledFieldDto filledFieldDto) {
-        if (filledFieldDto instanceof TextFilledFieldDto textField) {
-            Assert.notNull(textField.getTextValue(), "Text value must not be null for a field of type TEXT.");
-        } else if (filledFieldDto instanceof NumberFilledFieldDto numberField) {
-            Assert.notNull(numberField.getNumberValue(), "Number value must not be null for a field of type NUMBER.");
+    private void validateNumberField(FilledFieldDto filledFieldDto, Field field) {
+        if (!(filledFieldDto instanceof NumberFilledFieldDto numberField)) {
+            throw new IllegalArgumentException(format("For field with id %s you must provide a value for type: NUMBER", field.getId()));
         }
+        Assert.notNull(numberField.getNumberValue(), "Number value must not be null for a field of type NUMBER.");
+    }
+
+    private void validateTextField(FilledFieldDto filledFieldDto, Field field) {
+        if (!(filledFieldDto instanceof TextFilledFieldDto textField)) {
+            throw new IllegalArgumentException(format("For field with id %s you must provide a value for type: TEXT", field.getId()));
+        }
+        Assert.hasText(textField.getTextValue(), "Text value must not be null or empty for a field of type TEXT.");
     }
 }
